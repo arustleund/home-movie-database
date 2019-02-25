@@ -1,13 +1,5 @@
 <template>
-  <HelloWorld />
+  <div>
+    <p>Welcome to the Home Movie Database!</p>
+  </div>
 </template>
-
-<script>
-  import HelloWorld from '../components/HelloWorld'
-
-  export default {
-    components: {
-      HelloWorld
-    }
-  }
-</script>
