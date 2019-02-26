@@ -38,9 +38,8 @@ export const actions = {
         console.log(error)
       })
   },
-  fetchEvent({ commit, getters }, id) {
+  fetchPerson({ commit, getters }, id) {
     var person = getters.getPersonById(id)
-
     if (person) {
       commit('SET_PERSON', person)
     } else {

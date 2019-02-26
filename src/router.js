@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import CreatePerson from '@/views/CreatePerson.vue'
 import PersonList from '@/views/PersonList.vue'
+import CreateMovie from '@/views/CreateMovie.vue'
 
 Vue.use(Router)
 
@@ -33,6 +34,11 @@ export default new Router({
       path: '/person',
       name: 'people',
       component: PersonList
+    },
+    {
+      path: '/movie/create',
+      name: 'movie-create',
+      component: CreateMovie
     }
   ]
 })

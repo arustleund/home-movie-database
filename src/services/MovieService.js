@@ -10,13 +10,13 @@ const apiClient = axios.create({
 })
 
 export default {
-  getPeople() {
-    return apiClient.get('/people?_sort=lastName,firstName')
+  getMovies() {
+    return apiClient.get('/movies')
   },
-  getPerson(id) {
-    return apiClient.get('/people/' + id)
+  getMovie(id) {
+    return apiClient.get('/movies/' + id)
   },
-  postPerson(person) {
-    return apiClient.post('/people', person)
+  postPerson(movie) {
+    return apiClient.post('/movies', movie)
   }
 }
