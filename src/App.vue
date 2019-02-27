@@ -34,6 +34,14 @@
             <v-list-tile-title>Add Movie</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-list-tile to="/movie/list" @click="title = 'Movies'">
+          <v-list-tile-action>
+            <v-icon>movie</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Movies</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
         <v-list-tile to="/about">
           <v-list-tile-action>
             <v-icon>info</v-icon>

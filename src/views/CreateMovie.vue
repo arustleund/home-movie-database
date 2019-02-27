@@ -47,10 +47,7 @@
       ></v-autocomplete>
       <v-btn type="submit" color="primary">submit</v-btn>
     </v-form>
-    <v-snackbar
-      v-model="submittedSuccessfully"
-      color="success"
-      :timeout="createMessageTimeout"
+    <v-snackbar v-model="submittedSuccessfully" color="success" :timeout="5000"
       >Movie Created Successfully
       <v-btn dark flat @click="submittedSuccessfully = false">Close</v-btn>
     </v-snackbar>
@@ -63,7 +60,6 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {
-      createMessageTimeout: 5000,
       movie: this.createFreshMovie(),
       submittedSuccessfully: false
     }

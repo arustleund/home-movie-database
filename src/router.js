@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import CreatePerson from '@/views/CreatePerson.vue'
 import PersonList from '@/views/PersonList.vue'
 import CreateMovie from '@/views/CreateMovie.vue'
+import MovieList from '@/views/MovieList.vue'
 
 Vue.use(Router)
 
@@ -36,9 +37,20 @@ export default new Router({
       component: PersonList
     },
     {
+      path: '/person/edit/:id',
+      name: 'person-edit',
+      component: CreatePerson,
+      props: true
+    },
+    {
       path: '/movie/create',
       name: 'movie-create',
       component: CreateMovie
+    },
+    {
+      path: '/movie/list',
+      name: 'movies',
+      component: MovieList
     }
   ]
 })

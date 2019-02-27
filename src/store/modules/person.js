@@ -24,6 +24,7 @@ export const actions = {
     return PersonService.postPerson(person)
       .then(() => {
         commit('ADD_PERSON', person)
+        //commit('SET_PERSON', person)
       })
       .catch(error => {
         console.log(error)

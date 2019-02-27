@@ -17,6 +17,9 @@ export default {
     return apiClient.get('/people/' + id)
   },
   postPerson(person) {
+    if (person.id) {
+      return apiClient.put('/people/' + person.id, person)
+    }
     return apiClient.post('/people', person)
   }
 }
