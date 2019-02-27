@@ -27,6 +27,7 @@ export const actions = {
       })
       .catch(error => {
         console.log(error)
+        throw error
       })
   },
   fetchPeople({ commit }) {
@@ -36,6 +37,7 @@ export const actions = {
       })
       .catch(error => {
         console.log(error)
+        throw error
       })
   },
   fetchPerson({ commit, getters }, id) {
@@ -49,6 +51,7 @@ export const actions = {
         })
         .catch(error => {
           console.log(error)
+          throw error
         })
     }
   }

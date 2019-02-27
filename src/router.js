@@ -31,7 +31,7 @@ export default new Router({
       component: CreatePerson
     },
     {
-      path: '/person',
+      path: '/person/list',
       name: 'people',
       component: PersonList
     },

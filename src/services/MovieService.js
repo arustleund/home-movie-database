@@ -16,7 +16,7 @@ export default {
   getMovie(id) {
     return apiClient.get('/movies/' + id)
   },
-  postPerson(movie) {
+  postMovie(movie) {
     return apiClient.post('/movies', movie)
   }
 }

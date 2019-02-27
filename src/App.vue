@@ -10,20 +10,28 @@
             <v-list-tile-title>Home</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile to="/person/create" @click="title = 'Create Person'">
+        <v-list-tile to="/person/create" @click="title = 'Add Person'">
           <v-list-tile-action>
             <v-icon>person_add</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Create Person</v-list-tile-title>
+            <v-list-tile-title>Add Person</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile to="/person" @click="title = 'People'">
+        <v-list-tile to="/person/list" @click="title = 'People'">
           <v-list-tile-action>
             <v-icon>group</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>People</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile to="/movie/create" @click="title = 'Add Movie'">
+          <v-list-tile-action>
+            <v-icon>add</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Add Movie</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
         <v-list-tile to="/about">
