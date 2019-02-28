@@ -4,8 +4,14 @@
       <template slot="items" slot-scope="props">
         <td>{{ props.item.title }}</td>
         <td>{{ props.item.description }}</td>
-        <td>{{ props.item.date | formatDate }}</td>
-        <td>
+        <td>{{ props.item.taken | formatDate }}</td>
+        <td class="justify-center layout px-0">
+          <v-btn
+            icon
+            :to="{ name: 'movie-edit', params: { id: props.item.id } }"
+          >
+            <v-icon>edit</v-icon>
+          </v-btn>
           <v-btn
             icon
             class="red--text"
@@ -16,7 +22,7 @@
             <v-icon>mdi-youtube</v-icon>
           </v-btn>
           <v-btn
-            v-if="props.item.people.length > 0"
+            v-if="props.item.people && props.item.people.length > 0"
             @click="props.expanded = !props.expanded"
             flat
             round
@@ -55,8 +61,8 @@ export default {
       headers: [
         { text: 'Title', value: 'title' },
         { text: 'Description', value: 'description' },
-        { text: 'Date', value: 'date' },
-        { text: 'Actions', value: 'name', sortable: false }
+        { text: 'Date Taken', value: 'taken' },
+        { text: 'Actions', value: 'name', sortable: false, align: 'center' }
       ],
       peopleDetails: []
     }

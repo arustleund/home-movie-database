@@ -7,10 +7,12 @@
         label="First Name"
       />
       <v-text-field v-model="person.person.lastName" label="Last Name" />
-      <v-btn type="submit" color="primary">submit</v-btn>
+      <v-btn type="submit" color="primary"
+        >{{ this.id ? 'Update' : 'Create' }} Person</v-btn
+      >
     </v-form>
-    <v-snackbar v-model="submittedSuccessfully" color="success" :timeout="5000"
-      >Person Created Successfully
+    <v-snackbar v-model="submittedSuccessfully" color="success" :timeout="5000">
+      Person {{ this.id ? 'Updated' : 'Created' }} Successfully
       <v-btn dark flat @click="submittedSuccessfully = false">Close</v-btn>
     </v-snackbar>
   </div>
@@ -24,6 +26,8 @@ export default {
   created() {
     if (this.id) {
       this.$store.dispatch('person/fetchPerson', this.id)
+    } else {
+      this.$store.dispatch('person/clearPerson')
     }
   },
   data() {
@@ -33,14 +37,28 @@ export default {
   },
   methods: {
     submit() {
-      this.$store
-        .dispatch('person/createPerson', this.person.person)
-        .then(() => {
-          //this.person.person = { id: null, firstName: '', lastName: '' }
-          this.submittedSuccessfully = true
-          this.$refs.firstName.focus()
-        })
-        .catch(() => {})
+      if (this.id) {
+        this.$store
+          .dispatch('person/updatePerson', this.person.person)
+          .then(() => {
+            this.submittedSuccessfully = true
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      } else {
+        this.$store
+          .dispatch('person/createPerson', this.person.person)
+          .then(() => {
+            this.submittedSuccessfully = true
+            this.$store.dispatch('person/clearPerson').then(() => {
+              this.$refs.firstName.focus()
+            })
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
     }
   },
   computed: {
@@ -48,5 +66,3 @@ export default {
   }
 }
 </script>
-
-<style scoped></style>

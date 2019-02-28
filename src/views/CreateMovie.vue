@@ -1,10 +1,10 @@
 <template>
   <div>
     <v-form @submit.prevent="submit">
-      <v-text-field v-model="movie.title" ref="title" label="Title" />
-      <v-text-field v-model="movie.description" label="Description" />
+      <v-text-field v-model="movie.movie.title" ref="title" label="Title" />
+      <v-text-field v-model="movie.movie.description" label="Description" />
       <v-text-field
-        v-model="movie.link"
+        v-model="movie.movie.link"
         prepend-icon="link"
         label="YouTube Link"
       />
@@ -21,21 +21,22 @@
       >
         <v-text-field
           slot="activator"
-          v-model="movie.date"
-          label="Date"
+          v-model="movie.movie.taken"
+          label="Date Taken"
           prepend-icon="event"
+          clearable
           readonly
         ></v-text-field>
         <v-date-picker
           ref="picker"
-          v-model="movie.date"
+          v-model="movie.movie.taken"
           no-title
           scrollable
           @input="menu = false"
         ></v-date-picker>
       </v-menu>
       <v-autocomplete
-        v-model="movie.people"
+        v-model="movie.movie.people"
         :items="person.people"
         :item-text="fullName"
         prepend-icon="people"
@@ -45,10 +46,12 @@
         small-chips
         deletable-chips
       ></v-autocomplete>
-      <v-btn type="submit" color="primary">submit</v-btn>
+      <v-btn type="submit" color="primary"
+        >{{ this.id ? 'Update' : 'Create' }} Movie</v-btn
+      >
     </v-form>
-    <v-snackbar v-model="submittedSuccessfully" color="success" :timeout="5000"
-      >Movie Created Successfully
+    <v-snackbar v-model="submittedSuccessfully" color="success" :timeout="5000">
+      Movie {{ this.id ? 'Updated' : 'Created' }} Successfully
       <v-btn dark flat @click="submittedSuccessfully = false">Close</v-btn>
     </v-snackbar>
   </div>
@@ -58,36 +61,44 @@
 import { mapState } from 'vuex'
 
 export default {
+  props: ['id'],
+  created() {
+    this.$store.dispatch('person/fetchPeople')
+    if (this.id) {
+      this.$store.dispatch('movie/fetchMovie', this.id)
+    } else {
+      this.$store.dispatch('movie/clearMovie')
+    }
+  },
   data() {
     return {
-      movie: this.createFreshMovie(),
+      menu: false,
       submittedSuccessfully: false
     }
   },
-  created() {
-    this.$store.dispatch('person/fetchPeople')
-  },
   methods: {
     submit() {
-      this.$store
-        .dispatch('movie/createMovie', this.movie)
-        .then(() => {
-          this.movie = this.createFreshMovie()
-          this.submittedSuccessfully = true
-          this.$refs.title.focus()
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    },
-    createFreshMovie() {
-      return {
-        id: null,
-        title: '',
-        description: '',
-        link: '',
-        date: null,
-        people: []
+      if (this.id) {
+        this.$store
+          .dispatch('movie/updateMovie', this.movie.movie)
+          .then(() => {
+            this.submittedSuccessfully = true
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      } else {
+        this.$store
+          .dispatch('movie/createMovie', this.movie.movie)
+          .then(() => {
+            this.submittedSuccessfully = true
+            this.$store.dispatch('movie/clearMovie').then(() => {
+              this.$refs.title.focus()
+            })
+          })
+          .catch(error => {
+            console.log(error)
+          })
       }
     },
     fullName(person) {
@@ -95,9 +106,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['person'])
+    ...mapState(['person', 'movie'])
   }
 }
 </script>
-
-<style scoped></style>

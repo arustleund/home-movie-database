@@ -20,10 +20,23 @@ export const mutations = {
 }
 
 export const actions = {
+  clearMovie({ commit }) {
+    commit('SET_MOVIE', {})
+  },
   createMovie({ commit }, movie) {
-    return MovieService.postMovie(movie)
+    return MovieService.createMovie(movie)
       .then(() => {
         commit('ADD_MOVIE', movie)
+      })
+      .catch(error => {
+        console.log(error)
+        throw error
+      })
+  },
+  updateMovie({ commit }, movie) {
+    return MovieService.updateMovie(movie)
+      .then(() => {
+        commit('SET_MOVIE', movie)
       })
       .catch(error => {
         console.log(error)

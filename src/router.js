@@ -51,6 +51,12 @@ export default new Router({
       path: '/movie/list',
       name: 'movies',
       component: MovieList
+    },
+    {
+      path: '/movie/edit/:id',
+      name: 'movie-edit',
+      component: CreateMovie,
+      props: true
     }
   ]
 })

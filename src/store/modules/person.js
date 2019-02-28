@@ -20,11 +20,23 @@ export const mutations = {
 }
 
 export const actions = {
+  clearPerson({ commit }) {
+    commit('SET_PERSON', {})
+  },
   createPerson({ commit }, person) {
-    return PersonService.postPerson(person)
+    return PersonService.createPerson(person)
       .then(() => {
         commit('ADD_PERSON', person)
-        //commit('SET_PERSON', person)
+      })
+      .catch(error => {
+        console.log(error)
+        throw error
+      })
+  },
+  updatePerson({ commit }, person) {
+    return PersonService.updatePerson(person)
+      .then(() => {
+        commit('SET_PERSON', person)
       })
       .catch(error => {
         console.log(error)

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-  baseURL: process.env.VUE_APP_MOVIES_API_URL,
+  baseURL: 'http://www.rustleund.com/homemovies', //process.env.VUE_APP_MOVIES_API_URL',
   withCredentials: false, // This is the default
   headers: {
     Accept: 'application/json',
@@ -16,10 +16,10 @@ export default {
   getPerson(id) {
     return apiClient.get('/people/' + id)
   },
-  postPerson(person) {
-    if (person.id) {
-      return apiClient.put('/people/' + person.id, person)
-    }
+  createPerson(person) {
     return apiClient.post('/people', person)
+  },
+  updatePerson(person) {
+    return apiClient.put('/people/' + person.id, person)
   }
 }

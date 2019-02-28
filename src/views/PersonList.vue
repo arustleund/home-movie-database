@@ -17,11 +17,7 @@
           >
         </v-list-tile-content>
         <v-list-tile-action>
-          <v-btn
-            icon
-            ripple
-            :to="{ name: 'person-edit', params: { id: person.id } }"
-          >
+          <v-btn icon :to="{ name: 'person-edit', params: { id: person.id } }">
             <v-icon color="grey lighten-1">edit</v-icon>
           </v-btn>
         </v-list-tile-action>
