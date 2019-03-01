@@ -59,15 +59,14 @@
       ></v-autocomplete>
       <v-combobox
         v-model="movie.movie.tags"
-        :items="tags"
+        :items="tag.tags"
         :search-input.sync="tagSearch"
         item-text="name"
-        item-value="id"
+        label="Add or Create Tags"
+        item-value="name"
         hide-selected
         prepend-icon="local_offer"
-        label="Add some tags"
         multiple
-        persistent-hint
         small-chips
         deletable-chips
       >
@@ -101,6 +100,7 @@ export default {
   props: ['id'],
   created() {
     this.$store.dispatch('person/fetchPeople')
+    this.$store.dispatch('tag/fetchTags')
     if (this.id) {
       this.$store.dispatch('movie/fetchMovie', this.id)
     } else {
@@ -109,11 +109,6 @@ export default {
   },
   data() {
     return {
-      tags: [
-        { id: 1, name: 'funny' },
-        { id: 2, name: 'horse' },
-        { id: 3, name: 'netherlands' }
-      ],
       tagSearch: null,
       menu: false,
       personSearch: null,
@@ -122,22 +117,33 @@ export default {
   },
   methods: {
     submit() {
+      const movieToSave = Object.assign({}, this.movie.movie)
+      movieToSave.tags = this.movie.movie.tags.map(movieTag => {
+        var tagToSave = this.tag.tags.find(t => t.name === movieTag)
+        if (tagToSave) {
+          return tagToSave
+        }
+        return movieTag
+      })
       if (this.id) {
         this.$store
-          .dispatch('movie/updateMovie', this.movie.movie)
+          .dispatch('movie/updateMovie', movieToSave)
           .then(() => {
             this.submittedSuccessfully = true
+            this.$store.dispatch('tag/fetchTags')
           })
           .catch(error => {
             console.log(error)
           })
       } else {
         this.$store
-          .dispatch('movie/createMovie', this.movie.movie)
+          .dispatch('movie/createMovie', movieToSave)
           .then(() => {
             this.submittedSuccessfully = true
             this.$store.dispatch('movie/clearMovie').then(() => {
-              this.$refs.title.focus()
+              this.$store.dispatch('tag/fetchTags').then(() => {
+                this.$refs.title.focus()
+              })
             })
           })
           .catch(error => {
@@ -150,7 +156,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['person', 'movie'])
+    ...mapState(['person', 'movie', 'tag'])
   }
 }
 </script>
