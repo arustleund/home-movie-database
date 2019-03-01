@@ -1,11 +1,20 @@
 <template>
   <div>
     <v-form @submit.prevent="submit">
-      <v-text-field v-model="movie.movie.title" ref="title" label="Title" />
-      <v-text-field v-model="movie.movie.description" label="Description" />
+      <v-text-field
+        v-model="movie.movie.title"
+        ref="title"
+        prepend-icon="title"
+        label="Title"
+      />
+      <v-text-field
+        v-model="movie.movie.description"
+        prepend-icon="description"
+        label="Description"
+      />
       <v-text-field
         v-model="movie.movie.link"
-        prepend-icon="link"
+        prepend-icon="mdi-youtube"
         label="YouTube Link"
       />
       <v-menu
@@ -39,6 +48,8 @@
         v-model="movie.movie.people"
         :items="person.people"
         :item-text="fullName"
+        :search-input.sync="personSearch"
+        hide-selected
         prepend-icon="people"
         item-value="id"
         label="People"
@@ -46,6 +57,32 @@
         small-chips
         deletable-chips
       ></v-autocomplete>
+      <v-combobox
+        v-model="movie.movie.tags"
+        :items="tags"
+        :search-input.sync="tagSearch"
+        item-text="name"
+        item-value="id"
+        hide-selected
+        prepend-icon="local_offer"
+        label="Add some tags"
+        multiple
+        persistent-hint
+        small-chips
+        deletable-chips
+      >
+        <template slot="no-data">
+          <v-list-tile>
+            <v-list-tile-content>
+              <v-list-tile-title>
+                No results matching "
+                <strong>{{ tagSearch }}</strong
+                >". Press <kbd>enter</kbd> to create a new one
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </template>
+      </v-combobox>
       <v-btn type="submit" color="primary"
         >{{ this.id ? 'Update' : 'Create' }} Movie</v-btn
       >
@@ -72,7 +109,14 @@ export default {
   },
   data() {
     return {
+      tags: [
+        { id: 1, name: 'funny' },
+        { id: 2, name: 'horse' },
+        { id: 3, name: 'netherlands' }
+      ],
+      tagSearch: null,
       menu: false,
+      personSearch: null,
       submittedSuccessfully: false
     }
   },
