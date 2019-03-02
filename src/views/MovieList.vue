@@ -5,6 +5,7 @@
         <td>{{ props.item.title }}</td>
         <td>{{ props.item.description }}</td>
         <td>{{ props.item.taken | formatDate }}</td>
+        <td>{{ locationName(props.item.location) }}</td>
         <td class="justify-center layout px-0">
           <v-btn
             icon
@@ -53,6 +54,7 @@ import { mapState } from 'vuex'
 
 export default {
   created() {
+    this.$store.dispatch('location/fetchLocations')
     this.$store.dispatch('movie/fetchMovies')
     this.$store.dispatch('person/fetchPeople')
   },
@@ -62,6 +64,7 @@ export default {
         { text: 'Title', value: 'title' },
         { text: 'Description', value: 'description' },
         { text: 'Date Taken', value: 'taken' },
+        { text: 'Location', value: 'location' },
         { text: 'Actions', value: 'name', sortable: false, align: 'center' }
       ],
       peopleDetails: []
@@ -72,10 +75,18 @@ export default {
       return peopleIds.map(i =>
         this.person.people.find(person => person.id === i)
       )
+    },
+    locationName(locationId) {
+      if (locationId) {
+        return this.location.locations.find(
+          location => location.id === locationId
+        ).name
+      }
+      return ''
     }
   },
   computed: {
-    ...mapState(['movie', 'person'])
+    ...mapState(['movie', 'person', 'location'])
   }
 }
 </script>

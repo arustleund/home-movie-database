@@ -5,6 +5,8 @@ import CreatePerson from '@/views/CreatePerson.vue'
 import PersonList from '@/views/PersonList.vue'
 import CreateMovie from '@/views/CreateMovie.vue'
 import MovieList from '@/views/MovieList.vue'
+import LocationList from '@/views/LocationList.vue'
+import LocationDetail from '@/views/LocationDetail.vue'
 
 Vue.use(Router)
 
@@ -57,6 +59,22 @@ export default new Router({
       name: 'movie-edit',
       component: CreateMovie,
       props: true
+    },
+    {
+      path: '/location/list',
+      name: 'locations',
+      component: LocationList
+    },
+    {
+      path: '/location/edit/:id',
+      name: 'location-edit',
+      component: LocationDetail,
+      props: true
+    },
+    {
+      path: '/location/create',
+      name: 'location-create',
+      component: LocationDetail
     }
   ]
 })

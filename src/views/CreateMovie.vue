@@ -45,6 +45,16 @@
         ></v-date-picker>
       </v-menu>
       <v-autocomplete
+        v-model="movie.movie.location"
+        :items="location.locations"
+        item-text="name"
+        :search-input.sync="locationSearch"
+        hide-selected
+        prepend-icon="location_on"
+        item-value="id"
+        label="Location"
+      ></v-autocomplete>
+      <v-autocomplete
         v-model="movie.movie.people"
         :items="person.people"
         :item-text="fullName"
@@ -100,6 +110,7 @@ export default {
   props: ['id'],
   created() {
     this.$store.dispatch('person/fetchPeople')
+    this.$store.dispatch('location/fetchLocations')
     this.$store.dispatch('tag/fetchTags')
     if (this.id) {
       this.$store.dispatch('movie/fetchMovie', this.id)
@@ -110,6 +121,7 @@ export default {
   data() {
     return {
       tagSearch: null,
+      locationSearch: null,
       menu: false,
       personSearch: null,
       submittedSuccessfully: false
@@ -118,13 +130,15 @@ export default {
   methods: {
     submit() {
       const movieToSave = Object.assign({}, this.movie.movie)
-      movieToSave.tags = this.movie.movie.tags.map(movieTag => {
-        var tagToSave = this.tag.tags.find(t => t.name === movieTag)
-        if (tagToSave) {
-          return tagToSave
-        }
-        return movieTag
-      })
+      if (this.movie.movie.tags) {
+        movieToSave.tags = this.movie.movie.tags.map(movieTag => {
+          var tagToSave = this.tag.tags.find(t => t.name === movieTag)
+          if (tagToSave) {
+            return tagToSave
+          }
+          return movieTag
+        })
+      }
       if (this.id) {
         this.$store
           .dispatch('movie/updateMovie', movieToSave)
@@ -156,7 +170,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['person', 'movie', 'tag'])
+    ...mapState(['person', 'movie', 'tag', 'location'])
   }
 }
 </script>
