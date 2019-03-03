@@ -50,6 +50,7 @@
         item-text="name"
         :search-input.sync="locationSearch"
         hide-selected
+        clearable
         prepend-icon="location_on"
         item-value="id"
         label="Location"

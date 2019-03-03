@@ -1,5 +1,6 @@
 <template>
   <div>
+    <v-layout></v-layout>
     <v-data-table :items="movie.movies" :headers="headers">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.title }}</td>
@@ -9,21 +10,21 @@
         <td class="justify-center layout px-0">
           <v-btn
             icon
-            :to="{ name: 'movie-edit', params: { id: props.item.id } }"
-          >
-            <v-icon>edit</v-icon>
-          </v-btn>
-          <v-btn
-            icon
             class="red--text"
-            v-if="props.item.link"
+            :disabled="!props.item.link"
             :href="props.item.link"
             target="_blank"
           >
             <v-icon>mdi-youtube</v-icon>
           </v-btn>
           <v-btn
-            v-if="props.item.people && props.item.people.length > 0"
+            icon
+            :to="{ name: 'movie-edit', params: { id: props.item.id } }"
+          >
+            <v-icon>edit</v-icon>
+          </v-btn>
+          <v-btn
+            :disabled="!props.item.people || props.item.people.length == 0"
             @click="props.expanded = !props.expanded"
             flat
             round
@@ -54,9 +55,9 @@ import { mapState } from 'vuex'
 
 export default {
   created() {
-    this.$store.dispatch('location/fetchLocations')
     this.$store.dispatch('movie/fetchMovies')
     this.$store.dispatch('person/fetchPeople')
+    this.$store.dispatch('location/fetchLocations')
   },
   data() {
     return {
@@ -67,6 +68,7 @@ export default {
         { text: 'Location', value: 'location' },
         { text: 'Actions', value: 'name', sortable: false, align: 'center' }
       ],
+      personSearch: null,
       peopleDetails: []
     }
   },
@@ -77,10 +79,11 @@ export default {
       )
     },
     locationName(locationId) {
-      if (locationId) {
-        return this.location.locations.find(
+      if (locationId && this.location.locations.length > 0) {
+        const foundLocation = this.location.locations.find(
           location => location.id === locationId
-        ).name
+        )
+        return foundLocation.name
       }
       return ''
     }
