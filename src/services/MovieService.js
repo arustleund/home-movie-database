@@ -13,6 +13,18 @@ export default {
   getMovies() {
     return apiClient.get('/movies')
   },
+  searchMovies(peopleFilter) {
+    var url = '/movies/search?'
+    if (peopleFilter && peopleFilter.length > 0) {
+      url += 'people='
+      url += peopleFilter.join()
+    }
+    return apiClient.get(url, {
+      validateStatus: function(status) {
+        return status < 500 // Reject only if the status code is greater than or equal to 500
+      }
+    })
+  },
   getMovie(id) {
     return apiClient.get('/movies/' + id)
   },

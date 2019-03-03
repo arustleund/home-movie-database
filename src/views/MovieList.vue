@@ -1,7 +1,20 @@
 <template>
   <div>
-    <v-layout></v-layout>
-    <v-data-table :items="movie.movies" :headers="headers">
+    <h2>Filter Results</h2>
+    <v-autocomplete
+      v-model="peopleFilter"
+      :items="person.people"
+      :item-text="fullName"
+      :search-input.sync="personSearch"
+      hide-selected
+      prepend-icon="people"
+      item-value="id"
+      label="People"
+      multiple
+      small-chips
+      deletable-chips
+    />
+    <v-data-table :items="moviesResultList" :headers="headers">
       <template slot="items" slot-scope="props">
         <td>{{ props.item.title }}</td>
         <td>{{ props.item.description }}</td>
@@ -55,7 +68,9 @@ import { mapState } from 'vuex'
 
 export default {
   created() {
-    this.$store.dispatch('movie/fetchMovies')
+    this.$store.dispatch('movie/searchMovies').then(data => {
+      this.moviesResultList = data
+    })
     this.$store.dispatch('person/fetchPeople')
     this.$store.dispatch('location/fetchLocations')
   },
@@ -68,8 +83,17 @@ export default {
         { text: 'Location', value: 'location' },
         { text: 'Actions', value: 'name', sortable: false, align: 'center' }
       ],
+      moviesResultList: [],
       personSearch: null,
-      peopleDetails: []
+      peopleDetails: [],
+      peopleFilter: []
+    }
+  },
+  watch: {
+    peopleFilter: function(newValue) {
+      this.$store.dispatch('movie/searchMovies', newValue).then(data => {
+        this.moviesResultList = data
+      })
     }
   },
   methods: {
@@ -86,6 +110,9 @@ export default {
         return foundLocation.name
       }
       return ''
+    },
+    fullName(person) {
+      return person.firstName + ' ' + person.lastName
     }
   },
   computed: {

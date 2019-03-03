@@ -3,17 +3,10 @@ import MovieService from '@/services/MovieService.js'
 export const namespaced = true
 
 export const state = {
-  movies: [],
   movie: {}
 }
 
 export const mutations = {
-  ADD_MOVIE(state, movie) {
-    state.movies.push(movie)
-  },
-  SET_MOVIES(state, movies) {
-    state.movies = movies
-  },
   SET_MOVIE(state, movie) {
     state.movie = movie
   }
@@ -23,15 +16,11 @@ export const actions = {
   clearMovie({ commit }) {
     commit('SET_MOVIE', {})
   },
-  createMovie({ commit }, movie) {
-    return MovieService.createMovie(movie)
-      .then(() => {
-        commit('ADD_MOVIE', movie)
-      })
-      .catch(error => {
-        console.log(error)
-        throw error
-      })
+  createMovie(ignore, movie) {
+    return MovieService.createMovie(movie).catch(error => {
+      console.log(error)
+      throw error
+    })
   },
   updateMovie({ commit }, movie) {
     return MovieService.updateMovie(movie)
@@ -43,34 +32,27 @@ export const actions = {
         throw error
       })
   },
-  fetchMovies({ commit }) {
-    MovieService.getMovies()
+  searchMovies(ignore, peopleFilter) {
+    return MovieService.searchMovies(peopleFilter)
       .then(response => {
-        commit('SET_MOVIES', response.data)
+        if (response.status == 404) {
+          return []
+        }
+        return response.data
       })
       .catch(error => {
         console.log(error)
         throw error
       })
   },
-  fetchMovie({ commit, getters }, id) {
-    var movie = getters.getMovieById(id)
-    if (movie) {
-      commit('SET_MOVIE', movie)
-    } else {
-      MovieService.getMovie(id)
-        .then(response => {
-          commit('SET_MOVIE', response.data)
-        })
-        .catch(error => {
-          console.log(error)
-          throw error
-        })
-    }
-  }
-}
-export const getters = {
-  getMovieById: state => id => {
-    return state.movies.find(movie => movie.id === id)
+  fetchMovie({ commit }, id) {
+    MovieService.getMovie(id)
+      .then(response => {
+        commit('SET_MOVIE', response.data)
+      })
+      .catch(error => {
+        console.log(error)
+        throw error
+      })
   }
 }
