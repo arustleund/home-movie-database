@@ -1,6 +1,11 @@
 <template>
   <div>
-    <h2>Filter Results</h2>
+    <h2>Search</h2>
+    <v-text-field
+      v-model="textSearch"
+      label="Text Search"
+      prepend-icon="title"
+    />
     <v-autocomplete
       v-model="peopleFilter"
       :items="person.people"
@@ -14,7 +19,12 @@
       small-chips
       deletable-chips
     />
-    <v-data-table :items="moviesResultList" :headers="headers">
+    <h2>Results</h2>
+    <v-data-table
+      :items="moviesResultList"
+      :headers="headers"
+      :loading="loading"
+    >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.title }}</td>
         <td>{{ props.item.description }}</td>
@@ -65,14 +75,17 @@
 
 <script>
 import { mapState } from 'vuex'
+import _ from 'lodash'
 
 export default {
   created() {
     this.$store.dispatch('movie/searchMovies').then(data => {
       this.moviesResultList = data
+      this.loading = false
     })
     this.$store.dispatch('person/fetchPeople')
     this.$store.dispatch('location/fetchLocations')
+    this.debounceSearch = _.debounce(this.performSearch, 500)
   },
   data() {
     return {
@@ -86,17 +99,33 @@ export default {
       moviesResultList: [],
       personSearch: null,
       peopleDetails: [],
-      peopleFilter: []
+      peopleFilter: [],
+      textSearch: null,
+      loading: true
     }
   },
   watch: {
-    peopleFilter: function(newValue) {
-      this.$store.dispatch('movie/searchMovies', newValue).then(data => {
-        this.moviesResultList = data
-      })
+    peopleFilter: function() {
+      this.performSearch()
+    },
+    textSearch: function() {
+      this.loading = true
+      this.debounceSearch()
     }
   },
   methods: {
+    performSearch() {
+      this.loading = true
+      this.$store
+        .dispatch('movie/searchMovies', {
+          peopleFilter: this.peopleFilter,
+          textFilter: this.textSearch
+        })
+        .then(data => {
+          this.moviesResultList = data
+          this.loading = false
+        })
+    },
     peopleDetail(peopleIds) {
       return peopleIds.map(i =>
         this.person.people.find(person => person.id === i)

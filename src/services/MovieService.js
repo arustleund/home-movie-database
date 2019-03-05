@@ -13,11 +13,16 @@ export default {
   getMovies() {
     return apiClient.get('/movies')
   },
-  searchMovies(peopleFilter) {
+  searchMovies(peopleFilter, textFilter) {
+    console.log('performing search ' + peopleFilter + ' ' + textFilter)
     var url = '/movies/search?'
     if (peopleFilter && peopleFilter.length > 0) {
       url += 'people='
       url += peopleFilter.join()
+      url += '&'
+    }
+    if (textFilter) {
+      url += 'text=' + encodeURIComponent(textFilter) + '&'
     }
     return apiClient.get(url, {
       validateStatus: function(status) {

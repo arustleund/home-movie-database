@@ -32,8 +32,10 @@ export const actions = {
         throw error
       })
   },
-  searchMovies(ignore, peopleFilter) {
-    return MovieService.searchMovies(peopleFilter)
+  searchMovies(ignore, parameters) {
+    let peopleFilter = parameters ? parameters.peopleFilter : null
+    let textFilter = parameters ? parameters.textFilter : null
+    return MovieService.searchMovies(peopleFilter, textFilter)
       .then(response => {
         if (response.status == 404) {
           return []
