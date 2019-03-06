@@ -14,7 +14,7 @@
       hide-selected
       prepend-icon="people"
       item-value="id"
-      label="People"
+      label="People Search"
       multiple
       small-chips
       deletable-chips
@@ -24,6 +24,7 @@
       :items="moviesResultList"
       :headers="headers"
       :loading="loading"
+      :pagination.sync="pagination"
     >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.title }}</td>
@@ -101,11 +102,13 @@ export default {
       peopleDetails: [],
       peopleFilter: [],
       textSearch: null,
-      loading: true
+      loading: true,
+      pagination: { rowsPerPage: 10 }
     }
   },
   watch: {
     peopleFilter: function() {
+      this.personSearch = ''
       this.performSearch()
     },
     textSearch: function() {

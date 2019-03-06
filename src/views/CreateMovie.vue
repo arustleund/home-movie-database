@@ -119,6 +119,14 @@ export default {
       this.$store.dispatch('movie/clearMovie')
     }
   },
+  watch: {
+    'movie.movie.people': function() {
+      this.personSearch = ''
+    },
+    'movie.movie.tags': function() {
+      this.tagSearch = ''
+    }
+  },
   data() {
     return {
       tagSearch: null,

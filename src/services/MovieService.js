@@ -14,7 +14,6 @@ export default {
     return apiClient.get('/movies')
   },
   searchMovies(peopleFilter, textFilter) {
-    console.log('performing search ' + peopleFilter + ' ' + textFilter)
     var url = '/movies/search?'
     if (peopleFilter && peopleFilter.length > 0) {
       url += 'people='
