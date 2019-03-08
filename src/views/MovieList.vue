@@ -19,6 +19,17 @@
       small-chips
       deletable-chips
     />
+    <v-autocomplete
+      v-model="locationFilter"
+      :items="location.locations"
+      item-text="name"
+      :search-input.sync="locationSearch"
+      hide-selected
+      clearable
+      prepend-icon="location_on"
+      item-value="id"
+      label="Location Search"
+    />
     <h2>Results</h2>
     <v-data-table
       :items="moviesResultList"
@@ -102,6 +113,8 @@ export default {
       peopleDetails: [],
       peopleFilter: [],
       textSearch: null,
+      locationFilter: null,
+      locationSearch: null,
       loading: true,
       pagination: { rowsPerPage: 10 }
     }
@@ -114,6 +127,9 @@ export default {
     textSearch: function() {
       this.loading = true
       this.debounceSearch()
+    },
+    locationFilter: function() {
+      this.performSearch()
     }
   },
   methods: {
@@ -122,7 +138,8 @@ export default {
       this.$store
         .dispatch('movie/searchMovies', {
           peopleFilter: this.peopleFilter,
-          textFilter: this.textSearch
+          textFilter: this.textSearch,
+          locationFilter: this.locationFilter
         })
         .then(data => {
           this.moviesResultList = data

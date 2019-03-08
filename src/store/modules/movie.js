@@ -35,7 +35,8 @@ export const actions = {
   searchMovies(ignore, parameters) {
     let peopleFilter = parameters ? parameters.peopleFilter : null
     let textFilter = parameters ? parameters.textFilter : null
-    return MovieService.searchMovies(peopleFilter, textFilter)
+    let locationFilter = parameters ? parameters.locationFilter : null
+    return MovieService.searchMovies(peopleFilter, textFilter, locationFilter)
       .then(response => {
         if (response.status == 404) {
           return []

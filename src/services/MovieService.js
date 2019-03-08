@@ -13,7 +13,7 @@ export default {
   getMovies() {
     return apiClient.get('/movies')
   },
-  searchMovies(peopleFilter, textFilter) {
+  searchMovies(peopleFilter, textFilter, locationFilter) {
     var url = '/movies/search?'
     if (peopleFilter && peopleFilter.length > 0) {
       url += 'people='
@@ -22,6 +22,9 @@ export default {
     }
     if (textFilter) {
       url += 'text=' + encodeURIComponent(textFilter) + '&'
+    }
+    if (locationFilter) {
+      url += 'location=' + locationFilter
     }
     return apiClient.get(url, {
       validateStatus: function(status) {
